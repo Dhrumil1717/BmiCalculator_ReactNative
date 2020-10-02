@@ -28,6 +28,7 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
     })
   }
 
+  
 
   // Destructuring
   const { height, weight, height_in } = inputs;
