@@ -11,7 +11,8 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
   const [ bmi, setBmi ] = useState(0);
 
   // Methods
-  const switchType = (name) => {
+  
+  const switchType = (name) => {              //Method to select STANDARD or METRIC
     if(name === 'metric') {
       setStandard(false)
     } else {
@@ -20,22 +21,64 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
     setInputs({
       height: null, weight: null, height_in: null
     })
+
+    setBmi(0)
   }
 
-  const changeInput = (e, name) => {
+  const changeInput = (e, name) => {          //Method to Set input values
     setInputs({
       ...inputs, [name]: e
     })
+
   }
+  const bmiResult = () =>
+  {
+    if(bmi>0 && bmi<=18.5 )
+    {
+      return (
+        <Text style={{ textAlign: 'center', fontSize: 25, color: '#43464b' }}>
+        Your Bmi is  {bmi.toFixed(2)} {"\n"}  You fall in the interval of "Underweight"
+      </Text>
+      )
+    }
+
+    else if (bmi>18.5 && bmi<=24.9 )
+    {
+      return (
+        <Text style={{ textAlign: 'center', fontSize: 25, color: '#43464b' }}>
+        Your Bmi is {bmi.toFixed(2)} {"\n"}  You fall in the interval of "Normal weight"
+      </Text>
+      )
+    }
+
+    else if (bmi>24.9 && bmi<=29.9)
+    {
+      return (
+        <Text style={{ textAlign: 'center', fontSize: 25, color: '#43464b' }}>
+        Your Bmi is {bmi.toFixed(2)} {"\n"} You fall in the interval of "Overweight"
+      </Text>
+      )
+    }
+    else if (bmi>29.9)
+    {
+      return (
+        <Text style={{ textAlign: 'center', fontSize: 25, color: '#43464b' }}>
+        Your Bmi is  {bmi.toFixed(2)} {"\n"} You fall in the interval of "Obese"
+      </Text>
+      )
+  }
+}
 
   
 
   // Destructuring
   const { height, weight, height_in } = inputs;
 
-  const calculateBmi = () => {
+  const calculateBmi = () => {                  //Method to calulate BMI 
     let calculated = 0;
-    if(standard) {
+    if(standard) 
+    {
+      
       const h_in = parseFloat(height_in);
       const h = parseFloat(height) * 12;
       const total = h + h_in;
@@ -43,7 +86,9 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
       calculated = (weight / (total * total))
       calculated = calculated * 703;
       console.log(calculated, 'calculated')
-    } else {
+    } 
+    else 
+    {
       const h = height / 100;
       calculated = weight / (h * h);
     }
@@ -52,23 +97,26 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
     setBmi(calculated)
   }
 
-  return (
+  return (                              //Designing the views
     <SafeAreaView style={{ flex: 1 }}>
     <View style={{...styles.mainContainer, 
     backgroundColor: standard ? '#43464b' : '#c1c3c4', }}>
       <View style={{ flex: 1, backgroundColor: 'white', paddingVertical: 10 }}>
       <View style={styles.tab}>
+                                      {/* Designing the standard tab button and applying styles*/}
         <TouchableOpacity onPress={() => switchType('standard')} style={standard ? styles.activeTabStyle : styles.tabStyle}>
           <Text style={standard ? styles.activeTextStyle : styles.textStyle}>
             Standard
           </Text>
         </TouchableOpacity>
+                                      {/* Designing the Metric tab button and applying styles*/}
         <TouchableOpacity onPress={() => switchType('metric')} style={!standard ? styles.activeTabStyle : styles.tabStyle}>
           <Text style={!standard ? styles.activeTextStyle : styles.textStyle}>
             Metric
           </Text>
         </TouchableOpacity>
       </View>
+                                        {/* Designing the input fields and applying styles*/}
       <View style={styles.inputContainer}>
         <View style={styles.inputField}>
           <TextInput keyboardType='number-pad' name='weight' value={weight} onChangeText={(e) => changeInput(e, 'weight')} placeholder={'Your Weight in' + (!standard ? '  KG' : '  lb')} style={styles.inputStyle} />
@@ -81,7 +129,7 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
            <TextInput keyboardType='number-pad' name='height_in' value={height_in} onChangeText={(e) => changeInput(e, 'height_in')} placeholder={'Your Height in' + (!standard ? '  Cm' : '  In')} style={styles.inputStyle} />
          </View>
         )}
-       
+                                        {/*Calculate button*/} 
         <TouchableOpacity style={styles.btnStyle} onPress={calculateBmi}>
           <Text style={styles.activeTextStyle}>
             Calculate !
@@ -90,10 +138,9 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
       </View>
       <View style={{ paddingVertical: 15, alignItems: 'center' }}>
       {bmi > 0 && (
-      <Text style={{ textAlign: 'center', fontSize: 25, color: '#43464b' }}>
-        Your Bmi is {"\n"} {bmi.toFixed(2)}
-      </Text>
+      bmiResult()
     )}
+    
     </View>
     </View>
     
@@ -101,6 +148,7 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
     </SafeAreaView>
   );
 }
+//Styles that are used in conjunction with views
 
 const styles = StyleSheet.create({
   mainContainer: {
